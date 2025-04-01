@@ -14,7 +14,7 @@ int main() {
     
     pid = fork();
     
-    memset(buffer, 0, 128);
+    memset(buffer, 0, 32);
     
     if (pid == 0) {
         // child process
