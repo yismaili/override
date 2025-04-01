@@ -156,7 +156,7 @@ level02@OverRide:~$
 ```
 
 1. **Decode Password:**
-
+Hex to ASCII conversion
 ```python
 hex_values = [
     '756e505234376848',  # First chunk
