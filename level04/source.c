@@ -7,7 +7,7 @@
 #include <signal.h>
 
 int main() {
-    char buffer[128];    // buffer at esp+0x20, size 128 bytes
+    char buffer[32];    // esp+0x20
     int status;          //  esp+0x1c
     pid_t pid;           // esp+0xac
     int ptrace_ret;      // esp+0xa8

