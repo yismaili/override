@@ -3,63 +3,72 @@
 #include <string.h>
 #include <time.h>
 
-void decrypt(int input) {
-    char encrypted_str[] = {0x75, 0x7c, 0x7d, 0x51, 
-                            0x67, 0x66, 0x73, 0x60, 
-                            0x7b, 0x66, 0x73, 0x7e, 
-                            0x33, 0x61, 0x7c, 0x7d, 
-                            0x00};
-
-    // XOR decryption
-    for (int i = 0; i < strlen(encrypted_str); i++) {
-        encrypted_str[i] ^= input;
+void decrypt(int key) {
+    char buffer[] = "Q}|u`sfg~sf{}|a3";  // encrypted string from the assembly 0x757c7d51, 0x67667360, 0x7b66737e, 0x33617c7d
+    size_t len = strlen(buffer);
+    int i;
+    
+    // XOR each character with the key
+    for (i = 0; i < len; i++) {
+        buffer[i] ^= key;
     }
-
-    if (strcmp(encrypted_str, "Congratulations!") == 0) {
+    
+    // compare the decrypted string with expected value
+    if (strcmp(buffer, "Congratulations!") == 0) {
         system("/bin/sh");
     } else {
-        puts("Invalid input!");
+        puts("Invalid Password!");
     }
 }
 
-void test(int input, int magic_number) {
-    int diff = magic_number - input;
+void test(int password, int target) {
 
-    if (diff > 21) {
-        srand(time(NULL));
+    int diff = target - password;// Calculate the difference between target and password
+    
+    // Check if the difference is within valid range (0-21 or 0x15)
+    if (diff <= 0x15) {
+        switch (diff) {
+            case 0: decrypt(diff); break;
+            case 1: decrypt(diff); break;
+            case 2: decrypt(diff); break;
+            case 3: decrypt(diff); break;
+            case 4: decrypt(diff); break;
+            case 5: decrypt(diff); break;
+            case 6: decrypt(diff); break;
+            case 7: decrypt(diff); break;
+            case 8: decrypt(diff); break;
+            case 9: decrypt(diff); break;
+            case 10: decrypt(diff); break;
+            case 11: decrypt(diff); break;
+            case 12: decrypt(diff); break;
+            case 13: decrypt(diff); break;
+            case 14: decrypt(diff); break;
+            case 15: decrypt(diff); break;
+            case 16: decrypt(diff); break;
+            case 17: decrypt(diff); break;
+            case 18: decrypt(diff); break;
+            case 19: decrypt(diff); break;
+            case 20: decrypt(diff); break;
+            case 21: decrypt(diff); break;
+        }
+    } else {
         decrypt(rand());
-        return;
     }
-
-  
-    static void *jump_table[] = {
-        // multiple decrypt calls with different inputs
-        &&label_0, &&label_1, &&label_2, &&label_3, 
-        // ... more labels
-    };
-
-    goto *jump_table[diff];
-
-    label_0: decrypt(input); return;
-    label_1: decrypt(input); return;
-    label_2: decrypt(input); return;
-    label_3: decrypt(input); return;
-    // ... more labels
 }
 
 int main() {
-    int input;
-
+    int password;
+    
     srand(time(NULL));
-
+    
     puts("***********************************");
-    puts("*\t     -Level03 -\t\t  *");
+    puts("*\t\tlevel03\t\t**");
     puts("***********************************");
-
-    printf("Enter password: ");
-    scanf("%d", &input);
-
-    test(input, 0x1337d00d);
-
+    
+    printf("Password:");
+    scanf("%d", &password);
+    
+    test(password, 0x1337d00d);
+    
     return 0;
 }
