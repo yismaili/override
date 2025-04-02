@@ -17,10 +17,18 @@ Main simply displays a message and calls handle_msg.
 
 **handle_msg key parts:**
 ```bash
-0x00000000000008d2 <+18>: add    $0x8c,%rax           # Points to username field at offset 140
-0x00000000000008ff <+63>: movl   $0x8c,-0xc(%rbp)     # Sets len field to 140
+# handle_msg function - structure layout
+0x00000000000008d2 <+18>: add    $0x8c,%rax         # 0x8c (140) is offset to username field
+0x00000000000008ff <+63>: movl   $0x8c,-0xc(%rbp)   # Setting len field to 0x8c (140)
 0x0000000000000910 <+80>: callq  0x9cd <set_username>
 0x000000000000091f <+95>: callq  0x932 <set_msg>
+
+# set_username - accessing username field
+0x0000000000000a5f <+146>: mov %cl,0x8c(%rdx,%rax,1) # Writing to username at offset 0x8c (140)
+
+# set_msg - accessing len field 
+0x00000000000009a9 <+119>: mov 0xb4(%rax),%eax      # Reading len field at offset 0xb4 (180)
+                                                     # 180-140=40, so len is 40 bytes after username
 ```
 **set_username key part:**
 ```bash
@@ -41,18 +49,17 @@ Uses the len value at offset 0xb4 (180) to control strncpy.
 0x00000000000008ad <+33>: callq 0x770 <fgets@plt>
 0x00000000000008b9 <+45>: callq 0x740 <system@plt>
 ```
-Gets user input and passes it directly to system().
+
 ## **Vulnerability**
 
 **Two-Stage Buffer Overflow**
 
-1. First Overflow:
-    - Username buffer is 40 bytes
-    - Length field is at offset 40
-    - Can overflow 1 byte to modify message length
-2. Second Overflow:
-    - Modified length allows writing beyond message buffer
-    - Can overwrite return address with secret_backdoor
+The Vulnerabilities in this Program:
+Buffer Overflow:
+    The program is vulnerable to buffer overflow because it allows writing more data than the allocated space in the buffers (e.g., msg[140] and username[40]). If the user inputs more data than the buffer can hold, it will overwrite adjacent memory, potentially leading to crashes or security vulnerabilities.
+
+Command Injection:
+    The program uses system() to execute arbitrary commands input by the user. This introduces a command injection vulnerability, where an attacker can trick the program into executing unauthorized commands, potentially leading to a compromise of the system.
 
 ## **Exploit**
 
