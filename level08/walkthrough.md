@@ -33,13 +33,18 @@ NASMCollapse
 
 ## **Vulnerability**
 
-The program has several security issues:
+The main problem with this program is that it does not check the file path given by the user. It simply adds "./backups/" to the filename and keeps the same folder structure.
 
-1. Always prepends './backups/' to input path
-2. Maintains exact directory structure of input file
-3. No path sanitization or validation
-4. Runs with elevated privileges that can read protected files
-5. Creates backups with same content but different permissions
+    This means:
+
+        If we provide /home/users/level09/.pass as input:
+
+        It will try to create the same directory structure inside "./backups/":
+
+        ```bash
+        ./backups/home/users/level09/.pass
+        ```
+        Since we can control where the backup is saved, we can trick the program into copying protected files to a place where we can read them.
 
 ## **Exploit**
 
