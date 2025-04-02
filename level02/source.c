@@ -35,7 +35,7 @@ int main() {
 
     fgets(username, sizeof(username), stdin);
     username[strcspn(username, "\n")] = '\0';
-    printf("username: %s\n", username);
+    printf(username);
 
     printf("Password: ");
     fgets(password, sizeof(password), stdin);
