@@ -186,7 +186,7 @@ print(password)
 **Output:** 
 
 ```python
-~ python3 d**ecoding**.py
+~ python3 decode.py
 Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H
 ➜  ~
 ```

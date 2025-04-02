@@ -59,6 +59,15 @@ As a result, it is possible to overwrite the return address, which could lead to
 
 **Exploit Structure**
 
+First thing we should do is get the address of secret_backdoor because gdb only gives us the offset from the program's entry (PIE enabled).
+
+we can easily achieve this by setting up a breakpoint at secret_backdoor
+(since ASLR is disabled the program entry is always the same even if PIE is enabled)
+
+```bash
+(gdb) b secret_backdoor 
+Breakpoint 2 at 0x555555554890
+```
 
 Stage 1: Username overflow
 

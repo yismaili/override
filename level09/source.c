@@ -40,9 +40,9 @@ void  set_username(struct var *test) {
 }
 
 void  handle_msg() {
-  struct var test;
+  struct var test = {0};
 
-  test.username = {0};
+  test.username;
   test.len = 140;
   set_username (&test);
   set_msg(&test);
