@@ -112,4 +112,54 @@ Dump of assembler code for function set_msg:
    0x00000000000009cb <+153>:	leaveq
    0x00000000000009cc <+154>:	retq
 End of assembler dump.
+(gdb) info function
+All defined functions:
+
+Non-debugging symbols:
+0x00000000000006f0  _init
+0x0000000000000720  strncpy
+0x0000000000000720  strncpy@plt
+0x0000000000000730  puts
+0x0000000000000730  puts@plt
+0x0000000000000740  system
+0x0000000000000740  system@plt
+0x0000000000000750  printf
+0x0000000000000750  printf@plt
+0x0000000000000760  __libc_start_main
+0x0000000000000760  __libc_start_main@plt
+0x0000000000000770  fgets
+0x0000000000000770  fgets@plt
+0x0000000000000780  __cxa_finalize
+0x0000000000000780  __cxa_finalize@plt
+0x0000000000000790  _start
+0x00000000000007bc  call_gmon_start
+0x00000000000007e0  __do_global_dtors_aux
+0x0000000000000860  frame_dummy
+0x000000000000088c  secret_backdoor
+0x00000000000008c0  handle_msg
+0x0000000000000932  set_msg
+0x00000000000009cd  set_username
+0x0000000000000aa8  main
+0x0000000000000ad0  __libc_csu_init
+0x0000000000000b60  __libc_csu_fini
+0x0000000000000b70  __do_global_ctors_aux
+0x0000000000000ba8  _fini
+(gdb) disas secret_backdoor
+Dump of assembler code for function secret_backdoor:
+   0x000000000000088c <+0>:	push   %rbp
+   0x000000000000088d <+1>:	mov    %rsp,%rbp
+   0x0000000000000890 <+4>:	add    $0xffffffffffffff80,%rsp
+   0x0000000000000894 <+8>:	mov    0x20171d(%rip),%rax        # 0x201fb8
+   0x000000000000089b <+15>:	mov    (%rax),%rax
+   0x000000000000089e <+18>:	mov    %rax,%rdx
+   0x00000000000008a1 <+21>:	lea    -0x80(%rbp),%rax
+   0x00000000000008a5 <+25>:	mov    $0x80,%esi
+   0x00000000000008aa <+30>:	mov    %rax,%rdi
+   0x00000000000008ad <+33>:	callq  0x770 <fgets@plt>
+   0x00000000000008b2 <+38>:	lea    -0x80(%rbp),%rax
+   0x00000000000008b6 <+42>:	mov    %rax,%rdi
+   0x00000000000008b9 <+45>:	callq  0x740 <system@plt>
+   0x00000000000008be <+50>:	leaveq
+   0x00000000000008bf <+51>:	retq
+End of assembler dump.
 (gdb)

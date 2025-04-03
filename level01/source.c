@@ -1,45 +1,47 @@
 #include <stdio.h>
 #include <string.h>
 
-int verify_user_name(char *input) {
-    printf("Enter login name: ");
+char a_user_name[256]; // Global variable at 0x0804a040
+
+int verify_user_name() {
+    puts("verifying username....");
     
-    char *expected_name = "dat_wil";
-    return strcmp(input, expected_name) != 0;
+    return strcmp(a_user_name, "dat_wil");
 }
 
-int verify_user_pass(char *input) {
-    char *expected_pass = "admin";
-    return strcmp(input, expected_pass) != 0;
+int verify_user_pass(char *password) {
+    return strcmp(password, "admin");
 }
 
 int main() {
-    char username[0x10];
-    char password[0x64];
-    int auth_result = 0;
-
-    printf("***********************************\n");
-    printf("*\t     -Level01 -\t\t  *\n");
-    printf("***********************************\n");
-
-    printf("login: ");
-    fgets(username, 0x100, stdin);
-    username[strcspn(username, "\n")] = 0;  // remove newline
-
-    if (verify_user_name(username) != 0) {
-        printf("nope, incorrect username\n");
+    char password_buffer[64]; 
+    int auth_flag = 0;      
+    
+    memset(password_buffer, 0, 64);
+    
+    puts("********* ADMIN LOGIN PROMPT *********");
+    printf("Enter Username: ");
+   
+    fgets(a_user_name, 256, stdin);
+    
+    auth_flag = verify_user_name();
+    
+    if (auth_flag != 0) {
+        puts("nope, incorrect username...");
         return 1;
     }
-
-    printf("Password: ");
-    fgets(password, 0x64, stdin);
-    password[strcspn(password, "\n")] = 0; 
-
-    if (verify_user_pass(password) != 0) {
-        printf("nope, incorrect password\n");
+    
+    puts("Enter Password: ");
+    
+    fgets(password_buffer, 100, stdin);
+    
+    auth_flag = verify_user_pass(password_buffer);
+    
+    if (auth_flag != 0) {
+        puts("nope, incorrect password...");
         return 1;
     }
-
-    printf("Authenticated!\n");
+    
+    puts("Authenticated!");
     return 0;
 }
