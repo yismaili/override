@@ -16,7 +16,7 @@ The program forks into a **parent** and **child** process:
     - Monitors the child using `wait()`.
     - Detects `exec()` calls and terminates the child if triggered.
 - **Child Process:**
-    - Uses `prctl()` and `ptrace()` to prevent debugging.
+    - Uses `ptrace()` to allow the parent process to trace this process
     - Reads user input with `gets()` (**buffer overflow vulnerability**).
 
 The parent ensures execution control, while the child has a critical vulnerability in `gets()`.
