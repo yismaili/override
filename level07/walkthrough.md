@@ -121,7 +121,7 @@ The program lets the user store and read numbers. It will quit if the user enter
 
 ## **Vulnerability**
 
-We identified several vulnerabilities in the `store_number` function. There are no bounds checks or index validation, which allows us to read from any memory location.
+The vulnerability in this level is caused by integer overflow when bypassing the index check for being a multiple of 3. This allows the attacker to overwrite the return address on the stack, redirecting execution to the system("/bin/sh") function, which gives the attacker a shell. The overflow lets the attacker store arbitrary values, leading to arbitrary code execution.
 
 ```nasm
 ; Key Protection Checks in store_number:
@@ -140,7 +140,12 @@ We identified several vulnerabilities in the `store_number` function. There are 
 
 ## **Exploit**
 
-The goal is to make the program give us a shell by replacing `puts()` with `system("/bin/sh")`.
+The goal is 
+. Bypass index check using integer overflow by choosing an invalid index (e.g., 1073741938).
+
+. Overwrite return address with the address of system("/bin/sh").
+
+. Execute exploit by storing the addresses and triggering the overflow to spawn a shell.
 
 **Step 1: Find Important Addresses**
 
