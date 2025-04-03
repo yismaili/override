@@ -35,16 +35,16 @@ NASMCollapse
 
 The main problem with this program is that it does not check the file path given by the user. It simply adds "./backups/" to the filename and keeps the same folder structure.
 
-    This means:
+This means:
 
-        If we provide /home/users/level09/.pass as input:
+    If we provide /home/users/level09/.pass as input:
 
-        It will try to create the same directory structure inside "./backups/":
+    It will try to create the same directory structure inside "./backups/":
 
         ```bash
         ./backups/home/users/level09/.pass
         ```
-        Since we can control where the backup is saved, we can trick the program into copying protected files to a place where we can read them.
+    Since we can control where the backup is saved, we can trick the program into copying protected files to a place where we can read them.
 
 ## **Exploit**
 
