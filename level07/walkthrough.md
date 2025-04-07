@@ -175,7 +175,6 @@ We calculate the offset to the return address:
 - Buffer Start offset: esp+36 (0x24)
 - Saved Registers: 12 bytes
 - Stack Alignment: 16 bytes
-- `/4`: Because integers are 4 bytes.
 
 Calculation:
 
@@ -214,9 +213,6 @@ total_size - buffer_start:
 pushed_regs + alignment:
 
 - Adds extra space above stack
-1. / 4:
-    - Converts bytes to integers
-    - Because each array element is 4 bytes
 
 **Step 2:  Integer Overflow Calculation**:
 
